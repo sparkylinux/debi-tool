@@ -1,0 +1,28 @@
+# Polish localization file for DEBiTool.
+# Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
+# Under the GNU GPL v2
+# Translated to Polish by pavroo
+# Last update 2018/07/04 by pavroo
+LOCAL1="Wybierz plik DEB z lokalnego dysku, który chcesz zainstalować."
+LOCAL2="To nie jest pakiet DEB."
+LOCAL3="Wyjście..."
+LOCAL4="To nie jest poprawny pakiet DEB."
+LOCAL5="NIE znaleziono pliku control w pakiecie!"
+LOCAL6="Ta sama wersja pakietu jest zainstalowana."
+LOCAL7="Co chcesz teraz zrobić?"
+LOCAL8="Usunięcie"
+LOCAL9="Reinstalacja"
+LOCAL10="Instalacja"
+LOCAL11="Starsza wersja jest już zainstalowana."
+LOCAL12="Zakończ"
+LOCAL13="Połączenie z internetem nieudane!\n\nPrawdopodobnie NIE jesteś połączony z internetem lub główny serwer repozytoriów jest niedostępny.\n\nSprawdź to i spróbuj ponownie."
+LOCAL14="Nowsza wersja jest już zainstalowana."
+LOCAL15="Pakiet"
+LOCAL16="Wersja"
+LOCAL17="Architektura"
+LOCAL18="Rozmiar"
+LOCAL19="Czy chcesz zainstalować teraz ten pakiet?"
+LOCAL20="Zła architektura pakietu DEB."
+LOCAL21="Pakiet został zainstalowany."
+LOCAL22="Coś poszło źle! \nPrawdopodobnie zatrzymałeś instalację lub serwer repozytoriów jest niedostępny.\nSprawdź połączenie z internetem, odśwież listę pakietów i spróbuj ponownie."
+LOCAL23="NIE znaleziono pliku archiwum control w pakiecie!"

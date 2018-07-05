@@ -1,0 +1,206 @@
+#!/bin/bash
+
+# Yad based front-end to gdebi-core, apt & dpkg as an alternative for gdebi-gtk/kde tools
+# Copyright Paweł "pavroo" Pijanowski 2018 under GNU GPL
+# Last update 2018/07/05
+
+# get default's locale file
+DEFLOCDIR="/usr/share/sparky/debi-tool"
+if [ "`cat /etc/default/locale | grep pl`" != "" ]; then
+. $DEFLOCDIR/pl
+else
+. $DEFLOCDIR/en
+fi
+
+DIALOG700="yad --window-icon=application-x-deb --width=700 --height=600 --center"
+DIALOG="yad --window-icon=application-x-deb --width=450 --height=200 --center"
+TITLE="--always-print-result --dialog-sep --image=application-x-deb --title="
+TEXT="--text="
+FILESELECTION="--file-selection "
+FILTER="--file-filter"
+MSGBOX="--button=Ok:0"
+TITLETEXT="DEBiTool"
+TEMPFILE="/tmp/debitool/debitoolconf"
+TEMPDIR="/tmp/debitool"
+BUTTONREMOVE="--button=$LOCAL8:3"
+BUTTONREINSTALL="--button=$LOCAL9:4"
+BUTTONINSTALL="--button=$LOCAL10:0"
+BUTTONEXIT="--button=$LOCAL12:1"
+INSTALL="apt-get install"
+REINSTALL="apt-get install --reinstall"
+UNINSTALL="apt-get purge"
+CLEAN="apt-get autoremove"
+UPDATE="apt-get update"
+FIX="apt-get install-f"
+ARCH64="`uname -m | grep x86_64`"
+ARCH32="`uname -m | grep 686`"
+ARCHARM="`uname -m | grep arm`"
+#PINGTEST=$(ping -c 1 debian.org | grep [0-9])
+if [ -f /usr/bin/sparky-xterm ];then
+	SPARKYXTERM="/usr/bin/sparky-xterm"
+else
+	echo "sparky-xterm is missing... Exiting..."
+	exit 1
+fi
+
+if [ -d $TEMPDIR ]; then
+	rm -rf $TEMPDIR
+fi
+mkdir -p $TEMPDIR
+
+if [ "$1" = "" ]; then
+	echo "Usage of debi-tool is as follows:"
+	echo "debi-tool <package.deb>"
+	echo ""
+
+	DEBFILE=`$DIALOG700 $TITLE"$TITLETEXT" $FILESELECTION $FILTER="deb file |*.deb"`
+	if [ "$?" != "0" ]; then
+		exit 1
+	else
+		cp $DEBFILE $TEMPDIR
+		DEBFILE="$DEBFILE"
+	fi
+fi
+
+if [ "$1" != "" ]; then
+	cp $1 $TEMPDIR
+	# check the deb
+	cd $TEMPDIR
+	DEBFILE=`ls | grep *.deb`
+	if [ "$DEBFILE" = "" ]; then
+		$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL2\n\n$LOCAL3"
+		exit 1
+	fi
+fi
+
+cd $TEMPDIR
+# check the deb version
+#ar x $DEBFILE
+#if [ -f $TEMPDIR/control.tar.gz ] || [ -f $TEMPDIR/control.tar.xz ]; then
+#	echo "found control.tar.* file"
+#else
+#	$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL23\n\n$LOCAL3"
+#	exit 1
+#fi
+
+#if [ -f control.tar.gz ]; then
+#	echo "untar control.tar.gz"
+#	tar xfvz control.tar.gz
+#elif [ -f control.tar.xz ]; then
+#	echo "unxz control.tar.xz"
+#	unxz control.tar.xz
+#	tar -xf control.tar
+#fi
+
+#if [ ! -f control ]; then
+#	$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL5\n\n$LOCAL3"
+#	exit 1
+#fi
+
+dpkg-deb --info $DEBFILE >> $TEMPFILE
+
+DEBNAME=`cat $TEMPFILE | grep Package | cut -f3 -d " "`
+cat $TEMPFILE | grep Package | cut -f3 -d " " >> $TEMPDIR/debname
+DEBVER=`cat $TEMPFILE | grep Version | cut -f3 -d " "`
+DEBARCH=`cat $TEMPFILE | grep Architecture | cut -f3 -d " "`
+DEBSIZE=`cat $TEMPFILE | grep Installed-Size | cut -f3 -d " "`
+#DEBMAINT=`cat control | grep Maintainer`
+#DEBDEPS=`cat control | grep Depends`
+#DEBDESCR=`cat control | grep Description`
+
+# check arch
+if [ "$ARCH64" != "" ]; then
+	if [ "$DEBARCH" = "i386" ] || [ "$DEBARCH" = "armhf" ] || [ "$DEBARCH" = "aarch64" ]; then
+		$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL20\n\n$LOCAL3"
+		exit 1
+	fi
+elif [ "$ARCH32" != "" ]; then
+	if [ "$DEBARCH" = "amd64" ] || [ "$DEBARCH" = "armhf" ] || [ "$DEBARCH" = "aarch64" ]; then
+		$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL20\n\n$LOCAL3"
+		exit 1
+	fi
+elif [ "$ARCHARM" != "" ]; then
+	if [ "$DEBARCH" = "i386" ] || [ "$DEBARCH" = "amd64" ] || [ "$DEBARCH" = "aarch64" ]; then
+		$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL20\n\n$LOCAL3"
+		exit 1
+	fi
+fi
+
+# show status of the package
+OLDDEBFILE=`dpkg-query -l | grep $DEBNAME`
+
+if [ "$OLDDEBFILE" != "" ]; then
+	# check the old deb version
+	CHECKOLDDEBVER=`dpkg -s $DEBNAME | grep Version | cut -f2 -d " "`
+	### compare local and installed debs versions
+
+	# if versions are the same
+	if [ $DEBVER = $CHECKOLDDEBVER ]; then
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL6\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONREINSTALL $BUTTONEXIT
+		ret=$?
+		if [[ $ret -eq 3 ]]; then
+			# remove deb
+			remsu /usr/bin/debi-tool-exe remove
+		elif [[ $ret -eq 4 ]]; then
+			# reinstall deb
+			remsu /usr/bin/debi-tool-exe reinstall
+		else
+			exit 1
+		fi
+	fi
+
+	# if local version in newer than alredy installed
+	if [ $CHECKOLDDEBVER \< $DEBVER ]; then
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL11\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONINSTALL $BUTTONEXIT
+		ret=$?
+		if [[ $ret -eq 3 ]]; then
+			# remove deb
+			remsu /usr/bin/debi-tool-exe remove
+		elif [[ $ret -eq 0 ]]; then
+			# install deb
+			remsu /usr/bin/debi-tool-exe inst
+		else
+			exit 1
+		fi
+	fi
+
+	# if local version in older than alredy installed
+	if [ $DEBVER \< $CHECKOLDDEBVER ]; then
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL11\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONINSTALL $BUTTONEXIT
+		ret=$?
+		if [[ $ret -eq 3 ]]; then
+			# remove deb
+			remsu /usr/bin/debi-tool-exe remove
+		elif [[ $ret -eq 0 ]]; then
+			# install deb
+			remsu /usr/bin/debi-tool-exe inst
+		else
+			exit 1
+		fi
+	fi
+fi
+
+if [ "$OLDDEBFILE" = "" ]; then
+	# if deb is not installed yet
+	$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL19\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n" $BUTTONINSTALL $BUTTONEXIT
+		ret=$?
+		if [[ $ret -eq 0 ]]; then
+			# install deb
+			remsu /usr/bin/debi-tool-exe inst
+			# check is the package installed
+			NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
+				if [ "$NEWDEBFILE" != "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL21 \n\n$LOCAL3"
+					exit 0
+				elif [ "$NEWDEBFILE" = "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL22 \n\n$LOCAL3"
+					exit 0
+				fi
+		else
+			exit 1
+		fi
+fi
+
+rm -rf $TEMPDIR
+
+exit 0
