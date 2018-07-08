@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Yad based front-end to gdebi-core, apt & dpkg as an alternative for gdebi-gtk/kde tools
+# Yad based front-end to gdebi-core & apt as an alternative for gdebi-gtk/kde tools
 # Copyright Paweł "pavroo" Pijanowski 2018 under GNU GPL
-# Last update 2018/07/05
+# Last update 2018/07/07
 
 # get default's locale file
 DEFLOCDIR="/usr/share/sparky/debi-tool"
 if [ "`cat /etc/default/locale | grep pl_PL`" != "" ]; then
 . $DEFLOCDIR/pl
+elif [ "`cat /etc/default/locale | grep pt_BR`" != "" ]; then
+. $DEFLOCDIR/pt_BR
 else
 . $DEFLOCDIR/en
 fi
@@ -63,7 +65,7 @@ elif [ "$1" = "reinstall" ]; then
 	$SPARKYXTERM "$REINSTALL $DEBFILE"
 
 elif [ "$1" = "inst" ]; then
-	# install deb
+	# install local deb
 	#if [ "$PINGTEST" = "" ]; then
 	#	$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL13 \n\n$LOCAL3"
 	#	exit 1
@@ -72,6 +74,10 @@ elif [ "$1" = "inst" ]; then
 	#$SPARKYXTERM "$UPDATE"
 	#$SPARKYXTERM "$FIX"
 	$SPARKYXTERM "$GDEBI $DEBPACK"
+
+elif [ "$1" = "repoinst" ]; then
+	# install repo's deb
+	$SPARKYXTERM "$INSTALL $DEBFILE"
 fi
 
 rm -rf $TEMPDIR

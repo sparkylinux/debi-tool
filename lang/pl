@@ -2,7 +2,7 @@
 # Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
 # Under the GNU GPL v2
 # Translated to Polish by pavroo
-# Last update 2018/07/04 by pavroo
+# Last update 2018/07/07 by pavroo
 LOCAL1="Wybierz plik DEB z lokalnego dysku, który chcesz zainstalować."
 LOCAL2="To nie jest pakiet DEB."
 LOCAL3="Wyjście..."
@@ -18,7 +18,7 @@ LOCAL12="Zakończ"
 LOCAL13="Połączenie z internetem nieudane!\n\nPrawdopodobnie NIE jesteś połączony z internetem lub główny serwer repozytoriów jest niedostępny.\n\nSprawdź to i spróbuj ponownie."
 LOCAL14="Nowsza wersja jest już zainstalowana."
 LOCAL15="Pakiet"
-LOCAL16="Wersja"
+LOCAL16="Wersja Lokalna"
 LOCAL17="Architektura"
 LOCAL18="Rozmiar"
 LOCAL19="Czy chcesz zainstalować teraz ten pakiet?"
@@ -26,3 +26,11 @@ LOCAL20="Zła architektura pakietu DEB."
 LOCAL21="Pakiet został zainstalowany."
 LOCAL22="Coś poszło źle! \nPrawdopodobnie zatrzymałeś instalację lub serwer repozytoriów jest niedostępny.\nSprawdź połączenie z internetem, odśwież listę pakietów i spróbuj ponownie."
 LOCAL23="NIE znaleziono pliku archiwum control w pakiecie!"
+LOCAL24="Nie znaleziono pakietu kandydującego w repozytoriach."
+LOCAL25="Wersja Repozytoriów"
+LOCAL26="Dostępna jest nowsza wersja pakietu w repozytoriach."
+LOCAL27="Instalacja (wersja lokalna) lub RepoInstalacja (wersja repozytoriów)?"
+LOCAL28="RepoInstalacja"
+LOCAL29="Dostępna jest starsza wersja pakietu w repozytoriach."
+LOCAL30="Ta sama wersja jest dostępna w repozytoriach."
+LOCAL31="Wersja Zainstalowana"

@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Yad based front-end to gdebi-core, apt & dpkg as an alternative for gdebi-gtk/kde tools
+# Yad based front-end to gdebi-core & apt as an alternative for gdebi-gtk/kde tools
 # Copyright Paweł "pavroo" Pijanowski 2018 under GNU GPL
-# Last update 2018/07/05
+# Last update 2018/07/07
 
 # get default's locale file
 DEFLOCDIR="/usr/share/sparky/debi-tool"
 if [ "`cat /etc/default/locale | grep pl`" != "" ]; then
 . $DEFLOCDIR/pl
+elif [ "`cat /etc/default/locale | grep pt_BR`" != "" ]; then
+. $DEFLOCDIR/pt_BR
 else
 . $DEFLOCDIR/en
 fi
@@ -25,6 +27,7 @@ TEMPDIR="/tmp/debitool"
 BUTTONREMOVE="--button=$LOCAL8:3"
 BUTTONREINSTALL="--button=$LOCAL9:4"
 BUTTONINSTALL="--button=$LOCAL10:0"
+#BUTTONREPOINSTALL="--button=$LOCAL28:5"
 BUTTONEXIT="--button=$LOCAL12:1"
 INSTALL="apt-get install"
 REINSTALL="apt-get install --reinstall"
@@ -126,17 +129,17 @@ elif [ "$ARCHARM" != "" ]; then
 	fi
 fi
 
-# show status of the package
-OLDDEBFILE=`dpkg-query -l | grep $DEBNAME`
+# is the package installed?
+#OLDDEBFILE=`dpkg-query -l | grep $DEBNAME`
+OLDDEBFILE=`apt-cache policy $DEBNAME | head -n2 | tail -n1 | grep [0-9]`
 
 if [ "$OLDDEBFILE" != "" ]; then
 	# check the old deb version
 	CHECKOLDDEBVER=`dpkg -s $DEBNAME | grep Version | cut -f2 -d " "`
 	### compare local and installed debs versions
-
 	# if versions are the same
 	if [ $DEBVER = $CHECKOLDDEBVER ]; then
-		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL6\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONREINSTALL $BUTTONEXIT
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL6\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL31: $CHECKOLDDEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONREINSTALL $BUTTONEXIT
 		ret=$?
 		if [[ $ret -eq 3 ]]; then
 			# remove deb
@@ -149,9 +152,9 @@ if [ "$OLDDEBFILE" != "" ]; then
 		fi
 	fi
 
-	# if local version in newer than alredy installed
+	# if local version is in newer version than alredy installed
 	if [ $CHECKOLDDEBVER \< $DEBVER ]; then
-		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL11\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONINSTALL $BUTTONEXIT
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL11\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL31: $CHECKOLDDEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONINSTALL $BUTTONEXIT
 		ret=$?
 		if [[ $ret -eq 3 ]]; then
 			# remove deb
@@ -164,9 +167,9 @@ if [ "$OLDDEBFILE" != "" ]; then
 		fi
 	fi
 
-	# if local version in older than alredy installed
+	# if local version is in older version than alredy installed
 	if [ $DEBVER \< $CHECKOLDDEBVER ]; then
-		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL11\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONINSTALL $BUTTONEXIT
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL14\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL31: $CHECKOLDDEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONREMOVE $BUTTONINSTALL $BUTTONEXIT
 		ret=$?
 		if [[ $ret -eq 3 ]]; then
 			# remove deb
@@ -180,9 +183,30 @@ if [ "$OLDDEBFILE" != "" ]; then
 	fi
 fi
 
+# check is deb available in the repository
+CHECKSERVERDEB=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9]`	
+# check deb version in the repository
+SERVERDEBVERAVAIL4=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9] | cut -f4 -d " "`
+SERVERDEBVERAVAIL5=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9] | cut -f5 -d " "`
+SERVERDEBVERAVAIL6=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9] | cut -f6 -d " "`
+
+if [ "$CHECKSERVERDEB" != "" ]; then
+	if [ "$SERVERDEBVERAVAIL4" != "" ] && [ "$SERVERDEBVERAVAIL5" = "" ] && [ "$SERVERDEBVERAVAIL6" = "" ]; then
+		CHECKSERVERDEBVERAVAIL="$SERVERDEBVERAVAIL4"
+	elif [ "$SERVERDEBVERAVAIL4" = "" ] && [ "$SERVERDEBVERAVAIL5" != "" ] && [ "$SERVERDEBVERAVAIL6" = "" ]; then
+		CHECKSERVERDEBVERAVAIL="$SERVERDEBVERAVAIL5"
+	elif [ "$SERVERDEBVERAVAIL4" = "" ] && [ "$SERVERDEBVERAVAIL5" = "" ] && [ "$SERVERDEBVERAVAIL6" != "" ]; then
+		CHECKSERVERDEBVERAVAIL="$SERVERDEBVERAVAIL6"
+	fi
+else
+	CHECKSERVERDEBVERAVAIL="0"
+fi
+
+### if deb is not installed yet
 if [ "$OLDDEBFILE" = "" ]; then
-	# if deb is not installed yet
-	$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL19\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n" $BUTTONINSTALL $BUTTONEXIT
+	# if no deb candidate in repositories
+	if [ "$CHECKSERVERDEB" = "" ]; then
+		$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL24\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL25: \n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL19" $BUTTONINSTALL $BUTTONEXIT
 		ret=$?
 		if [[ $ret -eq 0 ]]; then
 			# install deb
@@ -199,6 +223,82 @@ if [ "$OLDDEBFILE" = "" ]; then
 		else
 			exit 1
 		fi
+	fi
+	
+	# if deb is available in repositories but not installed
+	if [ "$CHECKSERVERDEB" != "" ]; then
+
+		# if local version is the same as in the repository
+		if [ $DEBVER = $CHECKSERVERDEBVERAVAIL ]; then
+			$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL30\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL25: $CHECKSERVERDEBVERAVAIL\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONINSTALL $BUTTONEXIT
+			ret=$?
+			if [[ $ret -eq 0 ]]; then
+				# install local deb
+				remsu /usr/bin/debi-tool-exe inst
+			#elif [[ $ret -eq 5 ]]; then
+			#	# install repo's deb
+			#	remsu /usr/bin/debi-tool-exe repoinst
+				# check is the package installed
+				NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
+				if [ "$NEWDEBFILE" != "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL21 \n\n$LOCAL3"
+					exit 0
+				elif [ "$NEWDEBFILE" = "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL22 \n\n$LOCAL3"
+					exit 0
+				fi
+			else
+				exit 1
+			fi
+		fi
+		# if local version is in older version than in the repository
+		if [ $DEBVER \< $CHECKSERVERDEBVERAVAIL ]; then
+			$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL26\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL25: $CHECKSERVERDEBVERAVAIL\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONINSTALL $BUTTONEXIT
+			ret=$?
+			if [[ $ret -eq 0 ]]; then
+				# install local deb
+				remsu /usr/bin/debi-tool-exe inst
+			#elif [[ $ret -eq 5 ]]; then
+			#	# install repo's deb
+			#	remsu /usr/bin/debi-tool-exe repoinst
+				# check is the package installed
+				NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
+				if [ "$NEWDEBFILE" != "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL21 \n\n$LOCAL3"
+					exit 0
+				elif [ "$NEWDEBFILE" = "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL22 \n\n$LOCAL3"
+					exit 0
+				fi
+			else
+				exit 1
+			fi
+		fi
+		# if local version is in never version than in the repository
+		if [ $CHECKSERVERDEBVERAVAIL \< $DEBVER ]; then
+			$DIALOG $TITLE"$TITLETEXT" $TEXT"$LOCAL29\n\n$LOCAL15: $DEBNAME\n$LOCAL16: $DEBVER\n$LOCAL25: $CHECKSERVERDEBVERAVAIL\n$LOCAL17: $DEBARCH\n$LOCAL18: $DEBSIZE\n\n$LOCAL7" $BUTTONINSTALL $BUTTONEXIT
+			ret=$?
+			if [[ $ret -eq 0 ]]; then
+				# install local deb
+				remsu /usr/bin/debi-tool-exe inst
+			#elif [[ $ret -eq 5 ]]; then
+			#	# install repo's deb
+			#	remsu /usr/bin/debi-tool-exe repoinst
+				# check is the package installed
+				NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
+				if [ "$NEWDEBFILE" != "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL21 \n\n$LOCAL3"
+					exit 0
+				elif [ "$NEWDEBFILE" = "" ]; then
+					$DIALOG $TITLE"$TITLETEXT" $MSGBOX $TEXT"$LOCAL22 \n\n$LOCAL3"
+					exit 0
+				fi
+			else
+				exit 1
+			fi
+		fi
+	fi
+	
 fi
 
 rm -rf $TEMPDIR
