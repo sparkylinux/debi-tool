@@ -2,7 +2,7 @@
 # Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
 # Under the GNU GPL v2
 # Translated to Polish by pavroo
-# Last update 2018/07/07 by pavroo
+# Last update 2018/07/09 by pavroo
 LOCAL1="Wybierz plik DEB z lokalnego dysku, który chcesz zainstalować."
 LOCAL2="To nie jest pakiet DEB."
 LOCAL3="Wyjście..."
@@ -34,3 +34,6 @@ LOCAL28="RepoInstalacja"
 LOCAL29="Dostępna jest starsza wersja pakietu w repozytoriach."
 LOCAL30="Ta sama wersja jest dostępna w repozytoriach."
 LOCAL31="Wersja Zainstalowana"
+LOCAL32="Zależności nie są spełnione!"
+LOCAL33="Zależności są spełnione."
+LOCAL34="Następujące pakiety zostaną zainstalowane:"

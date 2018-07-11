@@ -1,5 +1,5 @@
 DEBiTool
-Yad based front-end to gdebi-core and apt as an alternative for gdebi-gtk/kde tools.
+Yad based front-end to dpkg and apt as an alternative for gdebi-gtk/kde tools.
 
 Copyright (C) 2018 Paweł Pijanowski and others, see copyright file.
 
@@ -20,7 +20,7 @@ Dependencies:
 -------------
 apt
 coreutils
-gdebi-core
+dpkg
 grep
 sparky-remsu (>= 0.2.5)
 sparky-xterm

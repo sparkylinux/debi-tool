@@ -2,7 +2,7 @@
 # Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
 # Under the GNU GPL v2
 # Traduzido por Daniel Campos Ramos "Capitain_Jack" <Capitain_Jack@yahoo.com> 2018/07/06
-# Last update 2018/07/08 by Daniel Campos Ramos
+# Last update 2018/07/09 by Elton Fabricio Ferreira
 LOCAL1="Selecionar um arquivo DEB de um disco local para ser instalado."
 LOCAL2="Este arquivo não é um pacote DEB."
 LOCAL3="Saindo..."
@@ -34,3 +34,6 @@ LOCAL28="RepoInstall"
 LOCAL29="Existe uma versão mais antiga deste pacote em um dos repositórios."
 LOCAL30="A mesma versão deste pacote existe no repositório."
 LOCAL31="Versão instalada"
+LOCAL32="Dependência não é satisfatória!"
+LOCAL33="Dependência é satisfatória"
+LOCAl34="Os pacotes a seguir serão instalados:"

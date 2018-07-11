@@ -1,7 +1,7 @@
 # English localization file for DEBiTool.
 # Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
 # Under the GNU GPL v2
-# Last update 2018/07/07 by pavroo
+# Last update 2018/07/09 by pavroo
 LOCAL1="Select DEB file from a local drive to be installed."
 LOCAL2="This is not a DEB package."
 LOCAL3="Exiting..."
@@ -33,3 +33,6 @@ LOCAL28="RepoInstall"
 LOCAL29="There is an older version of the package in repository."
 LOCAL30="The same version of the package is in the repository."
 LOCAL31="Installed Version"
+LOCAL32="Dependency is not satisfiable!"
+LOCAL33="Dependency is satisfiable."
+LOCAL34="Following packages will be installed:"
