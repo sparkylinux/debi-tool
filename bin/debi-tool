@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # Yad based front-end to dpkg & apt as an alternative for gdebi-gtk/kde tools
-# Copyright Paweł "pavroo" Pijanowski 2018 under GNU GPL
-# Last update 2018/08/01
+# Copyright Paweł "pavroo" Pijanowski 2018-2019 under GNU GPL
+# Last update 2019/09/05
 
 # get default's locale file
 DEFLOCDIR="/usr/share/sparky/debi-tool"
 if [ "`cat /etc/default/locale | grep fr`" != "" ]; then
 . $DEFLOCDIR/fr
+elif [ "`cat /etc/default/locale | grep hu`" != "" ]; then
+. $DEFLOCDIR/hu
 elif [ "`cat /etc/default/locale | grep id_ID`" != "" ]; then
 . $DEFLOCDIR/id_ID
 elif [ "`cat /etc/default/locale | grep it`" != "" ]; then
@@ -151,7 +153,7 @@ fi
 OLDDEBFILE=`apt-cache policy $DEBNAME | head -n2 | tail -n1 | grep [0-9]`
 
 # check is deb available in the repository
-CHECKSERVERDEB=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9]`	
+CHECKSERVERDEB=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9]`
 # check deb version in the repository
 SERVERDEBVERAVAIL4=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9] | cut -f4 -d " "`
 SERVERDEBVERAVAIL5=`apt-cache policy $DEBNAME | head -n3 | tail -n1 | grep [0-9] | cut -f5 -d " "`

@@ -1,0 +1,38 @@
+# Hungarian localization file for DEBiTool. (Translated by Nemomen).
+# Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
+# Under the GNU GPL v2
+# Last update 2018/07/10 by pavroo
+LOCAL1="Válassza ki a helyi meghajtóról a telepítendő DEB fájlt!”
+LOCAL2="Ez nem DEB csomag."
+LOCAL3="Kilépés..."
+LOCAL4="Ez nem a megfelelő DEB csomag."
+LOCAL5="NEM található vezérlőfájl/ellenőrzőfájl a csomagban!"
+LOCAL6="Már telepítve van a csomag azonos változata/verziója."
+LOCAL7="Mit kíván most tenni?"
+LOCAL8="Eltávolítás"
+LOCAL9="Újratelepítés"
+LOCAL10="Telepítés"
+LOCAL11="Már telepítve van korábbi változat/verzió."
+LOCAL12="Kilépés"
+LOCAL13="Az Internet kapcsolati teszt sikertelen!\n\nLehet, hogy Ön NEM kapcsolódik az Internet-hálózatra vagy a fő tárolószerver nem érhető el. Ellenőrizze és próbálja újra!”
+LOCAL14="Már telepítve van frissebb változat."
+LOCAL15="Csomag"
+LOCAL16="Helyi változat"
+LOCAL17="Szerkezet (struktúra)"
+LOCAL18="Méret"
+LOCAL19="Kívánja most telepíteni a csomagot?"
+LOCAL20="Helytelen szerkezetű (architecture) DEB csomag."
+LOCAL21="A csomag telepítve.."
+LOCAL22="Valami hibás! \nTalán leállította a telepítést vagy megszakadt az Internet kapcsolata.\nEllenőrizze, frissítse a csomaglistát és próbálja újra."
+LOCAL23="NEM található vezérlő/ellenőrző fájlarchívum a csomagban!"
+LOCAL24="Nem található csomagjelölt a tárolókban."
+LOCAL25="Adattár (repo) Változat/Verzió"
+LOCAL26="Frissebb változat elérhető az adattárban (repo)”
+LOCAL27="Telepíti a (helyi változatot) vagy a RepoInstall-t (repo változatot)?"
+LOCAL28="RepoInstall"
+LOCAL29="Korábbi változat elérhető az adattárban (repo).”
+LOCAL30="Azonos változat elérhető az adattárban (repo)”."
+LOCAL31="Telepített változat/verzió"
+LOCAL32="A függőség nem elégíthető ki!"
+LOCAL33="A függőség kielégíthető"
+LOCAL34="A következő csomagok lesznek telepítve:"
