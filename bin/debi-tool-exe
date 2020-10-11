@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Yad based front-end to dpkg & apt as an alternative for gdebi-gtk/kde tools
-# Copyright Paweł "pavroo" Pijanowski 2018 under GNU GPL
-# Last update 2018/07/19
+# Copyright Paweł "pavroo" Pijanowski 2018-2020 under GNU GPL
+# Last update 2020/10/09
 
 testroot="`whoami`"
 if [ "$testroot" != "root" ]; then
-	/usr/bin/remsu $0 &
+	echo "must be root... exiting..."
+	exit 1
 fi
 
 TEMPDIR="/tmp/debitool"
