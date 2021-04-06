@@ -1,0 +1,38 @@
+# Spanish localization file for DEBiTool.
+# Copyright 2018 Paweł "pavroo" Pijanowski <pavroo@onet.eu>
+# Under the GNU GPL v2
+# Last update 2021/03/28 by leonardo muñoz
+LOCAL1="Seleccione el archivo DEB de una unidad local para instalarlo".
+LOCAL2="Este no es un paquete DEB".
+LOCAL3="Saliendo ..."
+LOCAL4="Este no es un paquete de DEB adecuado".
+LOCAL5="¡NO se ha encontrado ningún archivo de control en el paquete!"
+LOCAL6="Está instalada la misma versión del paquete".
+LOCAL7="¿Qué te gustaría hacer ahora?"
+LOCAL8="Eliminar"
+LOCAL9="Reinstalar"
+LOCAL10="Instalar en pc"
+LOCAL11="La versión anterior ya está instalada".
+LOCAL12="Salida"
+LOCAL13="¡La prueba de conexión a Internet falló! \Probablemente NO esté conectado a Internet o el servidor del repositorio principal no funciona. \ N \ nCompruebe e inténtelo de nuevo".
+LOCAL14="La versión más nueva ya está instalada".
+LOCAL15="Paquete"
+LOCAL16="Versión local"
+LOCAL17="Arquitectura"
+LOCAL18="Tamaño"
+LOCAL19="¿Le gustaría instalar el paquete ahora?"
+LOCAL20="Arquitectura incorrecta del paquete DEB".
+LOCAL21="El paquete se ha instalado".
+LOCAL22="¡Algo está mal! \Probablemente ha detenido la instalación o su conexión a Internet está rota. \Compruebe, actualice la lista de paquetes y vuelva a intentarlo".
+LOCAL23="¡NO se ha encontrado ningún archivo de control en el paquete!"
+LOCAL24="No se ha encontrado ningún candidato de paquete en los repositorios".
+LOCAL25="Versión del repositorio"
+LOCAL26="Hay una versión más reciente del paquete en el repositorio".
+LOCAL27="¿Instalar (versión local) o RepoInstall (versión del repositorio)?"
+LOCAL28="Version del repositorio"
+LOCAL29="Hay una versión anterior del paquete en el repositorio".
+LOCAL30="La misma versión del paquete está en el repositorio".
+LOCAL31="Versión instalada"
+LOCAL32="¡La dependencia no es satisfactoria!"
+LOCAL33="La dependencia es satisfactoria".
+LOCAL34="Se instalarán los siguientes paquetes:"
