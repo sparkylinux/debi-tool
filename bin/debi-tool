@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Yad based front-end to dpkg & apt as an alternative for gdebi-gtk/kde tools
-# Copyright Paweł "pavroo" Pijanowski 2018-2021 under GNU GPL
-# Last update 2021/04/06
+# Copyright Paweł "pavroo" Pijanowski 2018-2022 under GNU GPL
+# Last update 2022/02/18
 
 # get default's locale file
 DEFLOCDIR="/usr/share/sparky/debi-tool"
@@ -49,10 +49,12 @@ ARCH64="`uname -m | grep x86_64`"
 ARCH32="`uname -m | grep 686`"
 ARCHARM="`uname -m | grep arm`"
 #PINGTEST=$(ping -c 1 debian.org | grep [0-9])
-if [ -f /usr/bin/sparky-xterm ];then
-	SPARKYXTERM="/usr/bin/sparky-xterm"
+if [ -f /usr/bin/sparky-xterm ]; then
+	XTERM="/usr/bin/sparky-xterm"
+elif [ -f /usr/bin/x-terminal-emulator ]; then
+	XTERM="/usr/bin/x-terminal-emulator"
 else
-	echo "sparky-xterm is missing... Exiting..."
+	echo "sparky-xterm or x-terminal-emulator is missing... Exiting..."
 	exit 1
 fi
 
@@ -189,10 +191,10 @@ if [ "$OLDDEBFILE" != "" ]; then
 			ret=$?
 			if [[ $ret -eq 3 ]]; then
 				# remove deb
-				remsu /usr/bin/debi-tool-exe remove
+				pkexec /usr/bin/debi-tool-exe remove
 			elif [[ $ret -eq 4 ]]; then
 				# reinstall deb
-				remsu /usr/bin/debi-tool-exe reinstall
+				pkexec /usr/bin/debi-tool-exe reinstall
 			else
 				exit 1
 			fi
@@ -201,10 +203,10 @@ if [ "$OLDDEBFILE" != "" ]; then
 			ret=$?
 			if [[ $ret -eq 3 ]]; then
 				# remove deb
-				remsu /usr/bin/debi-tool-exe remove
+				pkexec /usr/bin/debi-tool-exe remove
 			elif [[ $ret -eq 4 ]]; then
 				# reinstall deb
-				remsu /usr/bin/debi-tool-exe reinstall
+				pkexec /usr/bin/debi-tool-exe reinstall
 			else
 				exit 1
 			fi
@@ -221,10 +223,10 @@ if [ "$OLDDEBFILE" != "" ]; then
 			ret=$?
 			if [[ $ret -eq 3 ]]; then
 				# remove deb
-				remsu /usr/bin/debi-tool-exe remove
+				pkexec /usr/bin/debi-tool-exe remove
 			elif [[ $ret -eq 0 ]]; then
 				# install deb
-				remsu /usr/bin/debi-tool-exe inst
+				pkexec /usr/bin/debi-tool-exe inst
 			else
 				exit 1
 			fi
@@ -237,10 +239,10 @@ if [ "$OLDDEBFILE" != "" ]; then
 		ret=$?
 		if [[ $ret -eq 3 ]]; then
 			# remove deb
-			remsu /usr/bin/debi-tool-exe remove
+			pkexec /usr/bin/debi-tool-exe remove
 		elif [[ $ret -eq 0 ]]; then
 			# install deb
-			remsu /usr/bin/debi-tool-exe inst
+			pkexec /usr/bin/debi-tool-exe inst
 		else
 			exit 1
 		fi
@@ -259,7 +261,7 @@ if [ "$OLDDEBFILE" = "" ]; then
 			ret=$?
 			if [[ $ret -eq 0 ]]; then
 				# install deb
-				remsu /usr/bin/debi-tool-exe inst
+				pkexec /usr/bin/debi-tool-exe inst
 				# check is the package installed
 				NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
 				if [ "$NEWDEBFILE" != "" ]; then
@@ -284,10 +286,10 @@ if [ "$OLDDEBFILE" = "" ]; then
 			ret=$?
 			if [[ $ret -eq 0 ]]; then
 				# install local deb
-				remsu /usr/bin/debi-tool-exe inst
+				pkexec /usr/bin/debi-tool-exe inst
 			#elif [[ $ret -eq 5 ]]; then
 			#	# install repo's deb
-			#	remsu /usr/bin/debi-tool-exe repoinst
+			#	pkexec /usr/bin/debi-tool-exe repoinst
 				# check is the package installed
 				NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
 				if [ "$NEWDEBFILE" != "" ]; then
@@ -307,10 +309,10 @@ if [ "$OLDDEBFILE" = "" ]; then
 			ret=$?
 			if [[ $ret -eq 0 ]]; then
 				# install local deb
-				remsu /usr/bin/debi-tool-exe inst
+				pkexec /usr/bin/debi-tool-exe inst
 			#elif [[ $ret -eq 5 ]]; then
 			#	# install repo's deb
-			#	remsu /usr/bin/debi-tool-exe repoinst
+			#	pkexec /usr/bin/debi-tool-exe repoinst
 				# check is the package installed
 				NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
 				if [ "$NEWDEBFILE" != "" ]; then
@@ -334,10 +336,10 @@ if [ "$OLDDEBFILE" = "" ]; then
 				ret=$?
 				if [[ $ret -eq 0 ]]; then
 					# install local deb
-					remsu /usr/bin/debi-tool-exe inst
+					pkexec /usr/bin/debi-tool-exe inst
 					#elif [[ $ret -eq 5 ]]; then
 					#	# install repo's deb
-					#	remsu /usr/bin/debi-tool-exe repoinst
+					#	pkexec /usr/bin/debi-tool-exe repoinst
 					# check is the package installed
 					NEWDEBFILE=`dpkg -s $DEBNAME | grep Status`
 					if [ "$NEWDEBFILE" != "" ]; then

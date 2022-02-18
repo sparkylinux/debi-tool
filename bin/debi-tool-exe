@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Yad based front-end to dpkg & apt as an alternative for gdebi-gtk/kde tools
-# Copyright Paweł "pavroo" Pijanowski 2018-2020 under GNU GPL
-# Last update 2020/10/09
+# Copyright Paweł "pavroo" Pijanowski 2018-2022 under GNU GPL
+# Last update 2022/02/18
 
 testroot="`whoami`"
 if [ "$testroot" != "root" ]; then
@@ -16,10 +16,12 @@ INSTALL="apt-get install"
 REINSTALL="dpkg -i"
 UNINSTALL="apt-get purge"
 CLEAN="apt-get autoremove"
-if [ -f /usr/bin/sparky-xterm ];then
-	SPARKYXTERM="/usr/bin/sparky-xterm"
+if [ -f /usr/bin/sparky-xterm ]; then
+	XTERM="/usr/bin/sparky-xterm"
+elif [ -f /usr/bin/x-terminal-emulator ]; then
+	XTERM="/usr/bin/x-terminal-emulator"
 else
-	echo "sparky-xterm is missing... Exiting..."
+	echo "sparky-xterm or x-terminal-emulator is missing... Exiting..."
 	exit 1
 fi
 
@@ -29,22 +31,22 @@ DEBPACK=`ls | grep *.deb`
 
 if [ "$1" = "remove" ]; then
 	# remove deb
-	$SPARKYXTERM "$UNINSTALL $DEBFILE"
-	$SPARKYXTERM "$CLEAN"
+	$XTERM "$UNINSTALL $DEBFILE"
+	$XTERM "$CLEAN"
 
 elif [ "$1" = "reinstall" ]; then
 	# reinstall deb
-	$SPARKYXTERM "$REINSTALL $DEBPACK"
+	$XTERM "$REINSTALL $DEBPACK"
 
 elif [ "$1" = "inst" ]; then
 	# install local deb
-	$SPARKYXTERM "$INSTALL ./$DEBPACK"
-	#$SPARKYXTERM "$UPDATE"
-	#$SPARKYXTERM "$GDEBI $DEBPACK"
+	$XTERM "$INSTALL ./$DEBPACK"
+	#$XTERM "$UPDATE"
+	#$XTERM "$GDEBI $DEBPACK"
 
 #elif [ "$1" = "repoinst" ]; then
 #	# install repo's deb
-#	$SPARKYXTERM "$INSTALL $DEBFILE"
+#	$XTERM "$INSTALL $DEBFILE"
 fi
 
 rm -rf $TEMPDIR

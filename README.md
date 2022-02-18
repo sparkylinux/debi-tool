@@ -1,7 +1,7 @@
 DEBiTool
 Yad based front-end to dpkg and apt as an alternative for gdebi-gtk/kde tools.
 
-Copyright (C) 2018-2021 Paweł Pijanowski and others, see copyright file.
+Copyright (C) 2018-2022 Paweł Pijanowski and others, see copyright file.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@ apt
 coreutils
 dpkg
 grep
-sparky-remsu (>= 0.2.5)
-sparky-xterm
+policykit-1
+sparky-xterm | xterm | gnome-terminal | konsole | mate-terminal | xfce4-terminal | lxterminal | lxqt-terminal
 yad
 
 Install:
