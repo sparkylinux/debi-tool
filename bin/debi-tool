@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Yad based front-end to dpkg & apt as an alternative for gdebi-gtk/kde tools
-# Copyright Paweł "pavroo" Pijanowski 2018-2024 under GNU GPL
-# Last update 2024/07/28
+# Copyright Paweł "pavroo" Pijanowski 2018-2025 under GNU GPL
+# Last update 2025/06/02
 
 # get default's locale file
 DEFLOCDIR="/usr/share/sparky/debi-tool"
-if [ "`cat /etc/default/locale | grep LANG= | grep el`" != "" ]; then
+if [ "`cat /etc/default/locale | grep LANG= | grep de`" != "" ]; then
+. $DEFLOCDIR/de
+elif [ "`cat /etc/default/locale | grep LANG= | grep el`" != "" ]; then
 . $DEFLOCDIR/el
 elif [ "`cat /etc/default/locale | grep LANG= | grep es`" != "" ]; then
 	if [ "`cat /etc/default/locale | grep LANG= | grep es_AR`" != "" ]; then
